@@ -1,2 +1,2 @@
-# macports-packages
-Cartesi MacPorts packages repository
+# macports-ports
+Cartesi MacPorts Ports Repository
