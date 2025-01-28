@@ -1,0 +1,41 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem              1.0
+PortGroup               github 1.0
+
+github.setup            cartesi machine-emulator 0.19.0-test2 v
+github.tarball_from     archive
+name                    cartesi-machine-emulator
+categories              emulators
+license                 LGPL-3+
+platforms               darwin linux
+maintainers             @cartesi/emulator \
+                        @diegonehab
+description             The Cartesi Machine Emulator
+long_description    \
+    The Cartesi Machine Emulator is a feature-rich RISC-V emulator \
+    designed to support reproducible computations and fraud-proofs.
+homepage                https://github.com/cartesi/machine-emulator
+patchfiles              add-generated-files.diff
+patch.pre_args          -p1
+patch_sites             https://github.com/${github.author}/${github.project}/releases/download/v${github.version}/
+checksums               ${distname}.tar.gz \
+                        rmd160 e0bb600e63a7270ad0f765bf674ec2946553b249 \
+                        sha256 a188a9af51afc15e2b2c72eb4e835bb8114e493d92aecdac6888d55345944abd \
+                        size   1177599 \
+                        add-generated-files.diff \
+                        rmd160 737915cf250dc78159bfc2c9b42a30acb5e8de1c \
+                        sha256 a892e2d9f5c331f5e80bcb5db4133e7db625aa4d14ffdf9467b75c4c34d1744f \
+                        size   7098356
+depends_build-append    port:pkgconfig
+depends_lib-append      port:boost181 \
+                        port:lua54 \
+                        port:libslirp
+use_configure           no
+compiler.whitelist      macports-clang-16
+build.args-append       CC=${configure.cc} \
+                        CXX=${configure.cxx} \
+                        CPP=${configure.cpp}
+destroot.args-append    PREFIX=${prefix}
+build.args-append       PREFIX=${prefix}
+livecheck.type          none
