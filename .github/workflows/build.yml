@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Build MacPorts archives
+on: push
+
+env:
+  MACPORTS_VERSION: "2.11.5"
+  MACPORTS_MACOS: "15-Sequoia"
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install MacPorts
+      run: |
+        pkg="MacPorts-${{ env.MACPORTS_VERSION }}-${{ env.MACPORTS_MACOS }}.pkg"
+        echo "Downloading $pkg..."
+        curl -fSL --progress-bar -O "https://github.com/macports/macports-base/releases/download/v${{ env.MACPORTS_VERSION }}/$pkg"
+        echo "Installing..."
+        sudo installer -verbose -pkg "$pkg" -target /
+        rm "$pkg"
+        export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+        echo "Running selfupdate..."
+        sudo port selfupdate
+
+    - name: Configure local ports source
+      run: |
+        export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+        # Copy ports tree to a location accessible by root
+        local_ports=/opt/local/var/macports/sources/local/ports
+        sudo mkdir -p "$(dirname "$local_ports")"
+        sudo cp -R ${{ github.workspace }}/ports "$local_ports"
+        # Create port index
+        cd "$local_ports"
+        sudo portindex
+        # Prepend local source so it takes priority over the default tree
+        echo -e "file://$local_ports\n$(cat /opt/local/etc/macports/sources.conf)" | sudo tee /opt/local/etc/macports/sources.conf > /dev/null
+        # Configure MacPorts to generate .tbz2 archives on install
+        echo "portimage_mode directory_and_archive" | sudo tee -a /opt/local/etc/macports/macports.conf
+        # Sync to pick up the new source
+        sudo port sync
+
+    - name: Build all ports
+      run: |
+        export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+        sudo port install cartesi-machine
+
+    - name: Collect archives
+      run: |
+        mkdir -p archives
+        for p in cartesi-machine-emulator cartesi-machine-linux-image cartesi-machine-rootfs-image cartesi-machine; do
+          if ls /opt/local/var/macports/software/$p/$p*.tbz2 1>/dev/null 2>&1; then
+            mkdir -p "archives/$p"
+            cp /opt/local/var/macports/software/$p/$p*.tbz2 "archives/$p/"
+          fi
+        done
+
+    - name: Generate ports.tar
+      run: tar -cf archives/ports.tar ports
+
+    - name: Upload archives
+      uses: actions/upload-artifact@v4
+      with:
+        name: macports-archives
+        path: archives/
