@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Update MacPorts repository
+on: push
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Cache Macports
+      id: cache-macports
+      uses: actions/cache@v4
+      with:
+        path: /opt/local
+        key: ${{ runner.os }}-macports
+
+    - name: Install MacPorts and deactivate installed/active ports
+      if: steps.cache-macports.outputs.cache-hit != 'true'
+      run: |
+        wget https://github.com/macports/macports-base/releases/download/v2.10.5/MacPorts-2.10.5-14-Sonoma.pkg
+        sudo installer -pkg MacPorts-2.10.5-14-Sonoma.pkg -target /
+        \rm -f MacPorts-2.10.5-14-Sonoma.pkg
+        export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+        sudo port -f uninstall inactive || true
+        sudo port -f deactivate active || true
+
+    - name: Activate ports
+      run: |
+        export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+        sudo port activate installed
+
+    - name: Use installed MacPorts
+      run: |
+        export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+        port echo installed
