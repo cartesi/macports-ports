@@ -19,7 +19,7 @@ jobs:
         pkg="MacPorts-${{ env.MACPORTS_VERSION }}-${{ env.MACPORTS_MACOS }}.pkg"
         echo "Downloading $pkg..."
         curl -fSL --progress-bar -O "https://github.com/macports/macports-base/releases/download/v${{ env.MACPORTS_VERSION }}/$pkg"
-        echo "Installing..."
+        echo "Installing!!!"
         sudo installer -verbose -pkg "$pkg" -target /
         rm "$pkg"
         export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
