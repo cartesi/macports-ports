@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Flag sensitive changes
+on:
+  pull_request_target:
+    paths:
+      - '.github/workflows/**'
+
+jobs:
+  warn:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/github-script@v7
+      with:
+        script: |
+          await github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            labels: ['sensitive files']
+          });
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: '\u26a0\ufe0f This PR modifies CI workflows. Requires careful review before approval. \u26a0\ufe0f'
+          });
