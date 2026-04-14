@@ -66,3 +66,31 @@ jobs:
       with:
         name: macports-archives
         path: archives/
+
+  sign:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: signing
+    steps:
+
+    - name: Download archives
+      uses: actions/download-artifact@v4
+      with:
+        name: macports-archives
+        path: archives/
+
+    - name: Sign archives
+      env:
+        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+      run: |
+        for b in archives/*/*.tbz2; do
+          openssl dgst -ripemd160 -provider legacy -provider default \
+            -sign <(echo "$SIGNING_KEY" | base64 -d) -out "$b.rmd160" "$b"
+        done
+
+    - name: Upload signed archives
+      uses: actions/upload-artifact@v4
+      with:
+        name: macports-signed-archives
+        path: archives/
