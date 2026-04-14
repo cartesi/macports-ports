@@ -44,6 +44,24 @@ sudo port install lighttpd
 /opt/local/sbin/lighttpd -D -f <MACPORTS_PORTS>/lighttpd.conf
 ```
 
+### Signing the ports tree
+
+MacPorts 2.12+ requires a signify signature for the ports tree tarball.
+First, create a signify key pair (the `-n` flag skips the passphrase):
+```bash
+/opt/local/libexec/macports/bin/signify -G -n -c "Cartesi MacPorts" \
+    -p <MACPORTS_PORTS>/cartesi-macports-signify.pub \
+    -s <MACPORTS_PORTS>/cartesi-macports-signify.sec
+```
+
+Then sign the tarball:
+```bash
+/opt/local/libexec/macports/bin/signify -S \
+    -s <MACPORTS_PORTS>/cartesi-macports-signify.sec \
+    -m <MACPORTS_PORTS>/ports.tar \
+    -x <MACPORTS_PORTS>/ports.tar.sig
+```
+
 Now append a new source to `/opt/local/etc/macports/sources.conf`.
 ```bash
 # Cartesi test ports
@@ -190,10 +208,14 @@ Cycles: 48600713
 ## Binary archives
 
 Binary archives must be signed.
-First, create a signature pair.
+MacPorts is in the process of transitioning from OpenSSL RIPEMD-160 signatures to signify.
+As of MacPorts 2.12, the ports tree tarball uses signify (`.sig`), but binary archives still
+require OpenSSL RIPEMD-160 (`.rmd160`). Until the transition is complete, we need both.
+
+First, create an RSA key pair for signing binary archives.
 ```bash
-openssl genrsa -des3 -out <MACPORTS_PORTS>/cartesi-macports-privkey.pem 2048
-openssl rsa -in <MACPORTS_PORTS>/cartesi-macports-privkey.pem -pubout -out <MACPORTS_PORTS>/cartesi-macports-pubkey.pem
+openssl genrsa -out <MACPORTS_PORTS>/cartesi-macports-rmd160-privkey.pem 2048
+openssl rsa -in <MACPORTS_PORTS>/cartesi-macports-rmd160-privkey.pem -pubout -out <MACPORTS_PORTS>/cartesi-macports-rmd160-pubkey.pem
 ```
 
 By default, the command `port archive` now generates a directory with all the binaries inside it.
@@ -227,15 +249,17 @@ for t in emulator linux-image rootfs-image; do
     cp /opt/local/var/macports/software/$p/$p*.tbz2 archives/$p
 	# sign archive
 	for b in archives/$p/*; do
-		 openssl dgst -ripemd160 -sign cartesi-macports-privkey.pem -out $b.rmd160 $b
+		 openssl dgst -ripemd160 -sign cartesi-macports-rmd160-privkey.pem -out $b.rmd160 $b
 	done
 done
 ```
 
-To test the binary packages, we need to first append our public key to `/opt/local/etc/macports/pubkeys.conf`:
+To test the binary packages, we need to first append our public keys to `/opt/local/etc/macports/pubkeys.conf`:
 ```bash
-# Cartesi test binary packages
-<MACPORTS_PORTS>/cartesi-macports-pubkey.pem
+# Cartesi signify key for ports tree
+<MACPORTS_PORTS>/cartesi-macports-signify.pub
+# Cartesi RSA key for binary archives
+<MACPORTS_PORTS>/cartesi-macports-rmd160-pubkey.pem
 ```
 
 And then append the new archive  site to `/opt/local/etc/macports/archive_sites.conf`:

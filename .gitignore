@@ -1,6 +1,12 @@
-/PortIndex
-/PortIndex.quick
-
-*/*/work
-
+keys
+archives
+lighttpd.conf
+**/work
+ports.tar
+ports.tar.sig
+ports/PortIndex
+ports/PortIndex.quick
+*.sec
+*.pem
+*.pub
 .DS_Store

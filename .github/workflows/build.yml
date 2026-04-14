@@ -80,14 +80,23 @@ jobs:
         name: macports-archives
         path: archives/
 
+    - name: Install signify
+      run: sudo apt-get install -y signify-openbsd
+
     - name: Sign archives
       env:
-        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        RMD160_KEY: ${{ secrets.RMD160_KEY }}
+        SIGNIFY_KEY: ${{ secrets.SIGNIFY_KEY }}
       run: |
-        for b in archives/*/*.tbz2 archives/ports.tar; do
+        # Sign binary archives with OpenSSL (rmd160)
+        for b in archives/*/*.tbz2; do
           openssl dgst -ripemd160 -provider legacy -provider default \
-            -sign <(echo "$SIGNING_KEY" | base64 -d) -out "$b.rmd160" "$b"
+            -sign <(echo "$RMD160_KEY" | base64 -d) -out "$b.rmd160" "$b"
         done
+        # Sign ports tree with signify
+        echo "$SIGNIFY_KEY" | base64 -d > signify.sec
+        signify-openbsd -S -s signify.sec -m archives/ports.tar -x archives/ports.tar.sig
+        rm signify.sec
 
     - name: Upload signed archives
       uses: actions/upload-artifact@v4
@@ -124,8 +133,8 @@ jobs:
           mkdir -p "$name"
           cp -f "$dir"* "$name/"
         done
-        # Update ports.tar
-        cp ../incoming/ports.tar .
+        # Update ports.tar and its signature
+        cp ../incoming/ports.tar ../incoming/ports.tar.sig .
 
     - name: Push to gh-pages
       run: |
