@@ -69,7 +69,7 @@ jobs:
 
   sign:
     needs: build
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     environment: signing
     steps:
@@ -84,7 +84,7 @@ jobs:
       env:
         SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
       run: |
-        for b in archives/*/*.tbz2; do
+        for b in archives/*/*.tbz2 archives/ports.tar; do
           openssl dgst -ripemd160 -provider legacy -provider default \
             -sign <(echo "$SIGNING_KEY" | base64 -d) -out "$b.rmd160" "$b"
         done
@@ -94,3 +94,44 @@ jobs:
       with:
         name: macports-signed-archives
         path: archives/
+
+  publish:
+    needs: sign
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+
+    - name: Download signed archives
+      uses: actions/download-artifact@v4
+      with:
+        name: macports-signed-archives
+        path: incoming/
+
+    - name: Checkout gh-pages
+      uses: actions/checkout@v4
+      with:
+        ref: gh-pages
+        path: site
+
+    - name: Update site
+      run: |
+        cd site
+        # Copy new archives, preserving existing versions
+        for dir in ../incoming/*/; do
+          name=$(basename "$dir")
+          mkdir -p "$name"
+          cp -f "$dir"* "$name/"
+        done
+        # Update ports.tar
+        cp ../incoming/ports.tar .
+
+    - name: Push to gh-pages
+      run: |
+        cd site
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add -A
+        git diff --staged --quiet || git commit -m "Publish ${{ github.ref_name }}"
+        git push
