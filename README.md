@@ -1,6 +1,56 @@
 # macports-ports
 Cartesi MacPorts Ports Repository
 
+## Quick start
+
+To install the Cartesi Machine via MacPorts using our pre-built binary packages, add the following configuration to your MacPorts installation.
+
+Append to `/opt/local/etc/macports/sources.conf`:
+```
+https://cartesi.github.io/macports-ports/ports.tar
+```
+
+Append to `/opt/local/etc/macports/archive_sites.conf`:
+```
+name                Cartesi
+urls                https://cartesi.github.io/macports-ports
+```
+
+Save the following provisional public keys to files and add their absolute paths to `/opt/local/etc/macports/pubkeys.conf`.
+These keys will be replaced when Cartesi issues permanent signing keys.
+
+Signify public key (save as e.g. `cartesi-macports-signify.pub`):
+```
+untrusted comment: Cartesi MacPorts public key
+RWTCC6+ZA8rZ7iZRbWKVowA9sBrpbJAoxXuTZIAHRDZFQyvaf0i1Ovso
+```
+
+RSA public key (save as e.g. `cartesi-macports-rmd160-pubkey.pem`):
+```
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnl8Iz5P5r0nFCxCG+yxZ
+0DS9sFTG5Y1tNZ93mnvPg6CV/XJvOSelX6TlxycZQ/MF7qJ0Qg+tT4g8yXRzQJla
+rug9vPstmrv6gDWWQsB8JKrv1WVwmLYB2PsPJntZrvmNGMuainRQG8hUmXn4x6xF
+yHilFJE7euDkIu4bLcj5692z8VzeCHiL69YzNoLehdoW48Au6XKaJM5kNVGXZr7o
+UO+B8MjYNwgTloF185tMclRXBbxFAq3kCUlgG+qvYTeP9Z4Ii5RRN3ULesy19wq5
+/EMTLPMoSiqCRwIZgzTkckuQFXDiD3Jz1W+j60Vy+2LgEPcetxRqo88DW0T3jE42
+9QIDAQAB
+-----END PUBLIC KEY-----
+```
+
+Then add both to `pubkeys.conf`:
+```
+/path/to/cartesi-macports-signify.pub
+/path/to/cartesi-macports-rmd160-pubkey.pem
+```
+
+Then sync and install:
+```bash
+sudo port sync
+sudo port install cartesi-machine
+```
+
+## Local development and testing
 
 The following assumes
 
