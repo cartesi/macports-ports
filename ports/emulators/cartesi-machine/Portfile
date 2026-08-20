@@ -4,7 +4,7 @@ PortSystem          1.0
 
 name                cartesi-machine
 categories          emulators
-version             0.20.0
+version             0.21.0
 maintainers         @cartesi/emulator \
                     @diegonehab
 license             Apache-2

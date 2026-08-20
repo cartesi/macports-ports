@@ -3,7 +3,7 @@
 PortSystem              1.0
 PortGroup               github 1.0
 
-github.setup            cartesi machine-emulator 0.20.0 v
+github.setup            cartesi machine-emulator 0.21.0 v
 github.tarball_from     archive
 name                    cartesi-machine-emulator
 categories              emulators
@@ -20,22 +20,38 @@ patchfiles              add-generated-files.diff
 patch.pre_args          -p1
 patch_sites             https://github.com/${github.author}/${github.project}/releases/download/v${github.version}/
 checksums               ${distname}.tar.gz \
-                        rmd160 14dd2e537ac2d05f86836b157ef758abc0fa03b5 \
-                        sha256 3746abb72d45dd2388f79fc24b048fe306db8e1f9f7e072176e51b95c4453949 \
-                        size   1443405 \
+                        rmd160 e0bfa2187621894839e1a5fc546e4b4125146d2a \
+                        sha256 44fc83cb08a1907e66ab225ccf421b0fdad3f145be35b9a9ffe561d3563e3eda \
+                        size   2056063 \
                         add-generated-files.diff \
-                        rmd160 8b7ef9df41317f13810f9e0a9c82fbb6240ceeeb \
-                        sha256 d9c2afcefc2759e7cd37bbedc83d54c81515f0fddb671103b489b8789aee33bb \
-                        size   7242942
+                        rmd160 c54291f43ce6fd6817b1f229caa664cc62ff84a7 \
+                        sha256 596c5e171cac2e784aef01a26d47d19964b8593f74e37e863e0fcc1c9446be23 \
+                        size   7254963
 depends_build-append    port:pkgconfig
 depends_lib-append      port:boost187 \
                         port:lua54 \
                         port:libslirp
 use_configure           no
-compiler.whitelist      macports-clang-22
+compiler.whitelist      macports-clang-19 \
+                        macports-clang-20 \
+                        macports-clang-21 \
+                        macports-clang-22
 build.args-append       CC=${configure.cc} \
                         CXX=${configure.cxx} \
                         CPP=${configure.cpp}
+post-build {
+    system -W ${worksrcpath}/src \
+        "LUA_PATH_5_4='${worksrcpath}/src/?.lua;;' ${prefix}/bin/lua5.4 \
+        -e 'rawset(arg, 1, rawget(arg, 0)); rawset(arg, 0, \"cartesi-machine.lua\"); \
+        dofile(\"cartesi-machine.lua\")' -- --bash-completion > ${workpath}/cartesi-machine"
+}
 destroot.args-append    PREFIX=${prefix}
 build.args-append       PREFIX=${prefix}
+post-destroot {
+    set docdir ${destroot}${prefix}/share/doc/cartesi-machine
+    set bash_completion_dir ${destroot}${prefix}/share/bash-completion/completions
+    xinstall -d -m 0755 ${docdir} ${bash_completion_dir}
+    xinstall -m 0644 ${worksrcpath}/doc/README.md ${docdir}/README.md
+    xinstall -m 0644 ${workpath}/cartesi-machine ${bash_completion_dir}/cartesi-machine
+}
 livecheck.type          none
