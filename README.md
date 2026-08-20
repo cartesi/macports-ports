@@ -50,6 +50,16 @@ sudo port sync
 sudo port install cartesi-machine
 ```
 
+The package installs the Cartesi Machine documentation at
+`/opt/local/share/doc/cartesi-machine/README.md` and a Bash completion script at
+`/opt/local/share/bash-completion/completions/cartesi-machine`. To enable completion,
+install the optional `bash-completion` port and follow its activation notes:
+
+```bash
+sudo port install bash-completion
+port notes bash-completion
+```
+
 ## Local development and testing
 
 The following assumes
@@ -177,45 +187,45 @@ Continue? [Y/n]: Y
 --->  Attempting to fetch add-generated-files.diff from https://distfiles.macports.org/cartesi-machine-emulator
 --->  Attempting to fetch add-generated-files.diff from https://lis.pt.distfiles.macports.org/cartesi-machine-emulator
 --->  Attempting to fetch add-generated-files.diff from https://fra.de.distfiles.macports.org/cartesi-machine-emulator
---->  Attempting to fetch add-generated-files.diff from https://github.com/cartesi/machine-emulator/releases/download/v0.19.0-test2/
---->  Attempting to fetch machine-emulator-0.19.0-test2.tar.gz from https://distfiles.macports.org/cartesi-machine-emulator
---->  Attempting to fetch machine-emulator-0.19.0-test2.tar.gz from https://lis.pt.distfiles.macports.org/cartesi-machine-emulator
---->  Attempting to fetch machine-emulator-0.19.0-test2.tar.gz from https://fra.de.distfiles.macports.org/cartesi-machine-emulator
---->  Attempting to fetch machine-emulator-0.19.0-test2.tar.gz from https://github.com/cartesi/machine-emulator/archive/v0.19.0-test2
+--->  Attempting to fetch add-generated-files.diff from https://github.com/cartesi/machine-emulator/releases/download/v0.21.0/
+--->  Attempting to fetch machine-emulator-0.21.0.tar.gz from https://distfiles.macports.org/cartesi-machine-emulator
+--->  Attempting to fetch machine-emulator-0.21.0.tar.gz from https://lis.pt.distfiles.macports.org/cartesi-machine-emulator
+--->  Attempting to fetch machine-emulator-0.21.0.tar.gz from https://fra.de.distfiles.macports.org/cartesi-machine-emulator
+--->  Attempting to fetch machine-emulator-0.21.0.tar.gz from https://github.com/cartesi/machine-emulator/archive/v0.21.0
 --->  Verifying checksums for cartesi-machine-emulator
 --->  Extracting cartesi-machine-emulator
 --->  Applying patches to cartesi-machine-emulator
 --->  Configuring cartesi-machine-emulator
 --->  Building cartesi-machine-emulator
 --->  Staging cartesi-machine-emulator into destroot
---->  Installing cartesi-machine-emulator @0.19.0-test2_0
---->  Activating cartesi-machine-emulator @0.19.0-test2_0
+--->  Installing cartesi-machine-emulator @0.21.0_0
+--->  Activating cartesi-machine-emulator @0.21.0_0
 --->  Cleaning cartesi-machine-emulator
 --->  Fetching distfiles for cartesi-machine-rootfs-image
---->  Attempting to fetch rootfs-ubuntu.ext2 from https://distfiles.macports.org/cartesi-machine-rootfs-image
---->  Attempting to fetch rootfs-ubuntu.ext2 from https://lis.pt.distfiles.macports.org/cartesi-machine-rootfs-image
---->  Attempting to fetch rootfs-ubuntu.ext2 from https://fra.de.distfiles.macports.org/cartesi-machine-rootfs-image
---->  Attempting to fetch rootfs-ubuntu.ext2 from https://github.com/cartesi/machine-rootfs-image/releases/download/v0.20.0-test1/
+--->  Attempting to fetch rootfs-tools.ext2 from https://distfiles.macports.org/cartesi-machine-rootfs-image
+--->  Attempting to fetch rootfs-tools.ext2 from https://lis.pt.distfiles.macports.org/cartesi-machine-rootfs-image
+--->  Attempting to fetch rootfs-tools.ext2 from https://fra.de.distfiles.macports.org/cartesi-machine-rootfs-image
+--->  Attempting to fetch rootfs-tools.ext2 from https://github.com/cartesi/machine-guest-tools/releases/download/v0.18.0/
 --->  Verifying checksums for cartesi-machine-rootfs-image
 --->  Extracting cartesi-machine-rootfs-image
 --->  Configuring cartesi-machine-rootfs-image
 --->  Building cartesi-machine-rootfs-image
 --->  Staging cartesi-machine-rootfs-image into destroot
---->  Installing cartesi-machine-rootfs-image @0.20.0-test1_0
---->  Activating cartesi-machine-rootfs-image @0.20.0-test1_0
+--->  Installing cartesi-machine-rootfs-image @0.18.0_0
+--->  Activating cartesi-machine-rootfs-image @0.18.0_0
 --->  Cleaning cartesi-machine-rootfs-image
 --->  Fetching distfiles for cartesi-machine-linux-image
---->  Attempting to fetch linux-6.5.13-ctsi-1-v0.20.0.bin from https://distfiles.macports.org/cartesi-machine-linux-image
---->  Attempting to fetch linux-6.5.13-ctsi-1-v0.20.0.bin from https://lis.pt.distfiles.macports.org/cartesi-machine-linux-image
---->  Attempting to fetch linux-6.5.13-ctsi-1-v0.20.0.bin from https://fra.de.distfiles.macports.org/cartesi-machine-linux-image
---->  Attempting to fetch linux-6.5.13-ctsi-1-v0.20.0.bin from https://github.com/cartesi/machine-linux-image/releases/download/v0.20.0/
+--->  Attempting to fetch linux-6.5.13-ctsi-2-v0.21.0.bin from https://distfiles.macports.org/cartesi-machine-linux-image
+--->  Attempting to fetch linux-6.5.13-ctsi-2-v0.21.0.bin from https://lis.pt.distfiles.macports.org/cartesi-machine-linux-image
+--->  Attempting to fetch linux-6.5.13-ctsi-2-v0.21.0.bin from https://fra.de.distfiles.macports.org/cartesi-machine-linux-image
+--->  Attempting to fetch linux-6.5.13-ctsi-2-v0.21.0.bin from https://github.com/cartesi/machine-linux-image/releases/download/v0.21.0/
 --->  Verifying checksums for cartesi-machine-linux-image
 --->  Extracting cartesi-machine-linux-image
 --->  Configuring cartesi-machine-linux-image
 --->  Building cartesi-machine-linux-image
 --->  Staging cartesi-machine-linux-image into destroot
---->  Installing cartesi-machine-linux-image @0.20.0_0
---->  Activating cartesi-machine-linux-image @0.20.0_0
+--->  Installing cartesi-machine-linux-image @0.21.0_0
+--->  Activating cartesi-machine-linux-image @0.21.0_0
 --->  Cleaning cartesi-machine-linux-image
 --->  Fetching distfiles for cartesi-machine
 --->  Verifying checksums for cartesi-machine
@@ -223,8 +233,8 @@ Continue? [Y/n]: Y
 --->  Configuring cartesi-machine
 --->  Building cartesi-machine
 --->  Staging cartesi-machine into destroot
---->  Installing cartesi-machine @0.20.0_0
---->  Activating cartesi-machine @0.20.0_0
+--->  Installing cartesi-machine @0.21.0_0
+--->  Activating cartesi-machine @0.21.0_0
 --->  Cleaning cartesi-machine
 --->  Scanning binaries for linking errors
 --->  No broken files found.
@@ -334,33 +344,33 @@ The following dependencies will be installed:
  cartesi-machine-rootfs-image
 Continue? [Y/n]: Y
 --->  Fetching archive for cartesi-machine-emulator
---->  Attempting to fetch cartesi-machine-emulator-0.19.0-test2_0.darwin_23.arm64.tbz2 from http://127.0.0.1:6227/archives/cartesi-machine-emulator
---->  Attempting to fetch cartesi-machine-emulator-0.19.0-test2_0.darwin_23.arm64.tbz2.rmd160 from http://127.0.0.1:6227/archives/cartesi-machine-emulator
---->  Installing cartesi-machine-emulator @0.19.0-test2_0
---->  Activating cartesi-machine-emulator @0.19.0-test2_0
+--->  Attempting to fetch cartesi-machine-emulator-0.21.0_0.darwin_24.arm64.tbz2 from http://127.0.0.1:6227/archives/cartesi-machine-emulator
+--->  Attempting to fetch cartesi-machine-emulator-0.21.0_0.darwin_24.arm64.tbz2.rmd160 from http://127.0.0.1:6227/archives/cartesi-machine-emulator
+--->  Installing cartesi-machine-emulator @0.21.0_0
+--->  Activating cartesi-machine-emulator @0.21.0_0
 --->  Cleaning cartesi-machine-emulator
 --->  Fetching archive for cartesi-machine-rootfs-image
---->  Attempting to fetch cartesi-machine-rootfs-image-0.20.0-test1_0.any_any.noarch.tbz2 from http://127.0.0.1:6227/archives/cartesi-machine-rootfs-image
---->  Attempting to fetch cartesi-machine-rootfs-image-0.20.0-test1_0.any_any.noarch.tbz2.rmd160 from http://127.0.0.1:6227/archives/cartesi-machine-rootfs-image
---->  Installing cartesi-machine-rootfs-image @0.20.0-test1_0
---->  Activating cartesi-machine-rootfs-image @0.20.0-test1_0
+--->  Attempting to fetch cartesi-machine-rootfs-image-0.18.0_0.any_any.noarch.tbz2 from http://127.0.0.1:6227/archives/cartesi-machine-rootfs-image
+--->  Attempting to fetch cartesi-machine-rootfs-image-0.18.0_0.any_any.noarch.tbz2.rmd160 from http://127.0.0.1:6227/archives/cartesi-machine-rootfs-image
+--->  Installing cartesi-machine-rootfs-image @0.18.0_0
+--->  Activating cartesi-machine-rootfs-image @0.18.0_0
 --->  Cleaning cartesi-machine-rootfs-image
 --->  Fetching archive for cartesi-machine-linux-image
---->  Attempting to fetch cartesi-machine-linux-image-0.20.0_0.any_any.noarch.tbz2 from http://127.0.0.1:6227/archives/cartesi-machine-linux-image
---->  Attempting to fetch cartesi-machine-linux-image-0.20.0_0.any_any.noarch.tbz2.rmd160 from http://127.0.0.1:6227/archives/cartesi-machine-linux-image
---->  Installing cartesi-machine-linux-image @0.20.0_0
---->  Activating cartesi-machine-linux-image @0.20.0_0
+--->  Attempting to fetch cartesi-machine-linux-image-0.21.0_0.any_any.noarch.tbz2 from http://127.0.0.1:6227/archives/cartesi-machine-linux-image
+--->  Attempting to fetch cartesi-machine-linux-image-0.21.0_0.any_any.noarch.tbz2.rmd160 from http://127.0.0.1:6227/archives/cartesi-machine-linux-image
+--->  Installing cartesi-machine-linux-image @0.21.0_0
+--->  Activating cartesi-machine-linux-image @0.21.0_0
 --->  Cleaning cartesi-machine-linux-image
 --->  Fetching archive for cartesi-machine
---->  Attempting to fetch cartesi-machine-0.20.0_0.any_any.noarch.tbz2 from http://127.0.0.1:6227/archives/cartesi-machine
+--->  Attempting to fetch cartesi-machine-0.21.0_0.any_any.noarch.tbz2 from http://127.0.0.1:6227/archives/cartesi-machine
 --->  Fetching distfiles for cartesi-machine
 --->  Verifying checksums for cartesi-machine
 --->  Extracting cartesi-machine
 --->  Configuring cartesi-machine
 --->  Building cartesi-machine
 --->  Staging cartesi-machine into destroot
---->  Installing cartesi-machine @0.20.0_0
---->  Activating cartesi-machine @0.20.0_0
+--->  Installing cartesi-machine @0.21.0_0
+--->  Activating cartesi-machine @0.21.0_0
 --->  Cleaning cartesi-machine
 --->  Scanning binaries for linking errors
 --->  No broken files found.
