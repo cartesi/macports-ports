@@ -7,13 +7,13 @@ To install the Cartesi Machine via MacPorts using our pre-built binary packages,
 
 Append to `/opt/local/etc/macports/sources.conf`:
 ```
-https://cartesi.github.io/macports-ports/ports.tar
+https://dist.cartesi.io/macports/ports.tar
 ```
 
 Append to `/opt/local/etc/macports/archive_sites.conf`:
 ```
 name                Cartesi
-urls                https://cartesi.github.io/macports-ports
+urls                https://dist.cartesi.io/macports
 ```
 
 Save the following provisional public keys to files and add their absolute paths to `/opt/local/etc/macports/pubkeys.conf`.
