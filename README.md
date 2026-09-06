@@ -7,14 +7,17 @@ To install the Cartesi Machine via MacPorts using our pre-built binary packages,
 
 Append to `/opt/local/etc/macports/sources.conf`:
 ```
-https://dist.cartesi.io/macports/ports.tar
+https://dist.cartesi.io/macports/latest/ports.tar
 ```
 
 Append to `/opt/local/etc/macports/archive_sites.conf`:
 ```
 name                Cartesi
-urls                https://dist.cartesi.io/macports
+urls                https://dist.cartesi.io/macports/latest
 ```
+
+These URLs track the latest stable release. To select a specific release, replace
+`latest` with its version without the leading `v`, for example `0.21.0`.
 
 Save the following provisional public keys to files and add their absolute paths to `/opt/local/etc/macports/pubkeys.conf`.
 These keys will be replaced when Cartesi issues permanent signing keys.
