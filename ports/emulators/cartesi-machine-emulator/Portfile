@@ -3,7 +3,7 @@
 PortSystem              1.0
 PortGroup               github 1.0
 
-github.setup            cartesi machine-emulator 0.21.0 v
+github.setup            cartesi machine-emulator 0.22.0 v -test2
 github.tarball_from     archive
 name                    cartesi-machine-emulator
 categories              emulators
@@ -18,22 +18,21 @@ long_description    \
 homepage                https://github.com/cartesi/machine-emulator
 patchfiles              add-generated-files.diff
 patch.pre_args          -p1
-patch_sites             https://github.com/${github.author}/${github.project}/releases/download/v${github.version}/
+patch_sites             https://github.com/${github.author}/${github.project}/releases/download/${git.branch}/
 checksums               ${distname}.tar.gz \
-                        rmd160 e0bfa2187621894839e1a5fc546e4b4125146d2a \
-                        sha256 44fc83cb08a1907e66ab225ccf421b0fdad3f145be35b9a9ffe561d3563e3eda \
-                        size   2056063 \
+                        rmd160 40a86edd6de9489f5b595a49f86d5571c72fb781 \
+                        sha256 0ab1d6c07f0a1d1cb075f1c0bc3d4969456d1df377f0b9a6cb718fe7143ff05c \
+                        size   2218536 \
                         add-generated-files.diff \
-                        rmd160 c54291f43ce6fd6817b1f229caa664cc62ff84a7 \
-                        sha256 596c5e171cac2e784aef01a26d47d19964b8593f74e37e863e0fcc1c9446be23 \
+                        rmd160 106cfc0ec21aaaf7336981c65765661a49b1b539 \
+                        sha256 d0014275dd190127988561e821a633f36dfbc65cfdd299744f73d7ca443398dd \
                         size   7254963
 depends_build-append    port:pkgconfig
 depends_lib-append      port:boost187 \
                         port:lua54 \
                         port:libslirp
 use_configure           no
-compiler.whitelist      macports-clang-19 \
-                        macports-clang-20 \
+compiler.whitelist      macports-clang-20 \
                         macports-clang-21 \
                         macports-clang-22
 build.args-append       CC=${configure.cc} \
