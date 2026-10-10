@@ -5,8 +5,9 @@ PortSystem          1.0
 name                cartesi-machine-rootfs-image
 categories          emulators
 version             0.18.0
+set release_label   -test9
 homepage            https://github.com/cartesi/machine-guest-tools
-master_sites        ${homepage}/releases/download/v${version}/
+master_sites        ${homepage}/releases/download/v${version}${release_label}/
 distname            rootfs-tools
 extract.suffix      .ext2
 maintainers         @cartesi/emulator \
@@ -25,9 +26,9 @@ long_description    \
     the ext2 filesystem image and their corresponding licenses, please see \
     ${master_sites}${distname}${extract.suffix}.html
 
-checksums           rmd160 ccc51e8b8a6bc5df270a6ee5e0b28392f5677a46 \
-                    sha256 6c159937485c99f695021c4f2ea2a57bdadcf4e4bce8e71af5bee3bb9552802e \
-                    size   366809088
+checksums           rmd160 1ed1911de271a35401500bff705b23893df8e66f \
+                    sha256 7c1d69d985306fe79ccb446632008355b0099fd2e31714acb3c20656db5cf091 \
+                    size   366915584
 
 use_configure       no
 build               {}

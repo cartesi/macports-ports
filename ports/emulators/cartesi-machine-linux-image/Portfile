@@ -4,9 +4,13 @@ PortSystem          1.0
 
 name                cartesi-machine-linux-image
 categories          emulators
-version             0.21.0
-master_sites        https://github.com/cartesi/machine-linux-image/releases/download/v${version}/
-distname            linux-6.5.13-ctsi-2-v${version}
+version             6.18.38
+revision            1
+set release_label   -test3
+set linux_version   ${version}-ctsi-${revision}
+homepage            https://github.com/cartesi/linux
+master_sites        ${homepage}/releases/download/v${linux_version}${release_label}/
+distname            linux-${linux_version}
 extract.suffix      .bin
 maintainers         @cartesi/emulator \
                     @diegonehab
@@ -17,10 +21,9 @@ description         Linux kernel for the Cartesi Machine Emulator
 long_description    \
     The Linux kernel for the Cartesi Machine Emulator provides a default \
     kernel that can be used to boot Linux in the emulator.
-homepage            https://github.com/cartesi/machine-linux-image
-checksums           rmd160 faa504b5be6407857d2c878b33a881df7140c9f0 \
-                    sha256 5c900060da2db2bfa84cd39cd9cd722988c83c42225f3cac55f2d3157e48f32f \
-                    size   17530712
+checksums           rmd160 ca5334d466ee62821729372efb5314663d58f2e2 \
+                    sha256 8e516c496e55089df2d8db9f5d047a84967e0e29cf71b2c4a7f9e5305e58dcc2 \
+                    size   19653304
 use_configure       no
 build               {}
 destroot {
