@@ -26,40 +26,13 @@ jobs:
         echo "Running selfupdate..."
         sudo port selfupdate
 
-    - name: Configure local ports source
+    - name: Configure MacPorts
       run: |
-        export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-        # Copy ports tree to a location accessible by root
-        local_ports=/opt/local/var/macports/sources/local/ports
-        sudo mkdir -p "$(dirname "$local_ports")"
-        sudo cp -R ${{ github.workspace }}/ports "$local_ports"
-        # Create port index
-        cd "$local_ports"
-        sudo portindex
-        # Prepend local source so it takes priority over the default tree
-        echo -e "file://$local_ports\n$(cat /opt/local/etc/macports/sources.conf)" | sudo tee /opt/local/etc/macports/sources.conf > /dev/null
-        # Configure MacPorts to generate .tbz2 archives on install
+        # Generate .tbz2 archives on install
         echo "portimage_mode directory_and_archive" | sudo tee -a /opt/local/etc/macports/macports.conf
-        # Sync to pick up the new source
-        sudo port sync
 
-    - name: Build all ports
-      run: |
-        export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-        sudo port install cartesi-machine
-
-    - name: Collect archives
-      run: |
-        mkdir -p archives
-        for p in cartesi-machine-emulator cartesi-machine-linux-image cartesi-machine-rootfs-image cartesi-machine; do
-          if ls /opt/local/var/macports/software/$p/$p*.tbz2 1>/dev/null 2>&1; then
-            mkdir -p "archives/$p"
-            cp /opt/local/var/macports/software/$p/$p*.tbz2 "archives/$p/"
-          fi
-        done
-
-    - name: Generate ports.tar
-      run: tar -cf archives/ports.tar ports
+    - name: Build archives and ports.tar
+      run: make
 
     - name: Upload archives
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -73,6 +46,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: signing
     steps:
+
+    - name: Checkout code
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: Download archives
       uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
@@ -88,15 +64,11 @@ jobs:
         RMD160_KEY: ${{ secrets.RMD160_KEY }}
         SIGNIFY_KEY: ${{ secrets.SIGNIFY_KEY }}
       run: |
-        # Sign binary archives with OpenSSL (rmd160)
-        for b in archives/*/*.tbz2; do
-          openssl dgst -ripemd160 -provider legacy -provider default \
-            -sign <(echo "$RMD160_KEY" | base64 -d) -out "$b.rmd160" "$b"
-        done
-        # Sign ports tree with signify
-        echo "$SIGNIFY_KEY" | base64 -d > signify.sec
-        signify-openbsd -S -s signify.sec -m archives/ports.tar -x archives/ports.tar.sig
-        rm signify.sec
+        echo "$RMD160_KEY" | base64 -d > "$RUNNER_TEMP/rmd160.pem"
+        echo "$SIGNIFY_KEY" | base64 -d > "$RUNNER_TEMP/signify.sec"
+        make sign SIGNIFY=signify-openbsd \
+          RMD160_PRIVKEY="$RUNNER_TEMP/rmd160.pem" SIGNIFY_SECKEY="$RUNNER_TEMP/signify.sec"
+        rm "$RUNNER_TEMP/rmd160.pem" "$RUNNER_TEMP/signify.sec"
 
     - name: Upload signed archives
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
