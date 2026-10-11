@@ -1,0 +1,17 @@
+server.document-root = "${DOCUMENT_ROOT}"
+
+server.username  = "_www"
+server.groupname = "_www"
+
+server.port = ${SERVE_PORT}
+server.bind = "${SERVE_ADDRESS}"
+
+dir-listing.activate = "enable"
+
+mimetype.assign = (
+    ".tbz2"     => "application/x-bzip-compressed-tar",
+    ".rmd160"   => "text/binary",
+
+    # make the default mime type application/octet-stream.
+    ""          => "application/octet-stream",
+)
